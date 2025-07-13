@@ -8,7 +8,15 @@ export async function POST() {
         method: 'PUT',
         headers: { Authorization: `Bearer ${access_token}` },
     })
+        .then(result => {
+            console.info('Result:', result);
+            return result;
+        })
 
+        .catch(error => {
+            console.info('Failed to pause', error);
+            throw error;
+        })
 
-    return Response.json({ status: res.status === 200 ? 'Playback paused' : 'Failed to pause' });
+    return Response.json({ status: res.status === 200 || res.status === 204 ? 'Playback paused' : 'Failed to pause' });
 }
