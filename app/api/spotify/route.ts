@@ -1,3 +1,4 @@
+import { SPOTIFY_API_BASE_URL } from '@/app/constants';
 import { cookies } from 'next/headers';
 
 export async function GET() {
@@ -8,10 +9,10 @@ export async function GET() {
     }
 
     const [nowPlaying, topTracks] = await Promise.all([
-        fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+        fetch(`${SPOTIFY_API_BASE_URL}/me/player/currently-playing`, {
             headers: { Authorization: `Bearer ${access_token}` },
         }),
-        fetch('https://api.spotify.com/v1/me/top/tracks?limit=10', {
+        fetch(`${SPOTIFY_API_BASE_URL}/me/top/tracks?limit=10`, {
             headers: { Authorization: `Bearer ${access_token}` },
         })
     ]);
@@ -21,9 +22,12 @@ export async function GET() {
 
     return Response.json({
         currently_playing: nowData?.item?.name || null,
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
         artist: nowData?.item?.artists?.map((a: any) => a.name).join(', ') || null,
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
         top_10_tracks: topData.items.map((t: any) => ({
             name: t.name,
+            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
             artist: t.artists.map((a: any) => a.name).join(', '),
             uri: t.uri
         }))

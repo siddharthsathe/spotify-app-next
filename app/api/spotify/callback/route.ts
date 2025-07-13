@@ -29,10 +29,10 @@ export async function GET(req: NextRequest) {
 
     const data = await res.json();
 
-    const { access_token, refresh_token } = data;
+    const { access_token } = data;
 
     // Ideally in a prod app I would save tokens in DB 
-    const response = NextResponse.redirect('http://127.0.0.1:3000/api/spotify');
+    const response = NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/api/spotify`);
     response.cookies.set('access_token', access_token, {
         httpOnly: true,
         path: '/',
